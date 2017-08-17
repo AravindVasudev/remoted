@@ -75,6 +75,16 @@ app.get('/mouse/circle', (req, res) => {
   res.send('done.');
 });
 
+// presses alt + F4
+app.get('/close', (req, res) => {
+  if (process.platform === 'darwin') {
+    robot.keyTap('q', 'command');
+  } else {
+    robot.keyTap('f4', 'alt');
+  }
+  res.send('done.');
+});
+
 // Starts listening when the app is ready
 eapp.on('ready', () =>
     app.listen(3000, () => console.log('Listening @ 0.0.0.0:3000')));
