@@ -2,10 +2,11 @@ import { app as eapp } from 'electron';
 import express from 'express';
 import { spawn } from 'child_process';
 import robot from 'robotjs';
+import ip from 'ip';
 const app = express();
 
-// test route
-app.get('/', (req, res) => res.send('Working!'));
+// returns Local IP Address
+app.get('/', (req, res) => res.send(ip.address()));
 
 // shutdown
 app.get('/shutdown', (req, res) => {
