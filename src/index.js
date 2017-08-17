@@ -50,7 +50,31 @@ app.get('/mouse/sine', (req, res) => {
   res.send('done.');
 });
 
-// Starts listening when the app is ready
-eapp.on('ready', () => {
-    app.listen(3000, () => console.log('Listening @ 0.0.0.0:3000'));
+// move mouse in a circle
+app.get('/mouse/circle', (req, res) => {
+  // Speed up the mouse.
+  robot.setMouseDelay(2);
+
+  // get screen measurements
+  let screenSize = robot.getScreenSize();
+  let center = {
+    x: screenSize.width / 2,
+    y: screenSize.height / 2
+  };
+  let radius = (screenSize.height / 2) - 10;;
+
+  // draw circle
+  for (let a = 0; a < 360; a++) {
+    let radians = a * (Math.PI / 180);
+    let x = center.x + radius * Math.cos(radians);
+    let y = center.y + radius * Math.sin(radians);
+
+    robot.moveMouse(x, y);
+  }
+
+  res.send('done.');
 });
+
+// Starts listening when the app is ready
+eapp.on('ready', () =>
+    app.listen(3000, () => console.log('Listening @ 0.0.0.0:3000')));
