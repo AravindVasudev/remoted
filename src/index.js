@@ -32,6 +32,24 @@ app.get('/link', (req, res) => {
     res.send('Opened.');
 });
 
+// move mouse in sine form
+app.get('/mouse/sine', (req, res) => {
+  // Speed up the mouse.
+  robot.setMouseDelay(2);
+
+  let twoPI = Math.PI * 2.0;
+  let screenSize = robot.getScreenSize();
+  let height = (screenSize.height / 2) - 10;
+  let width = screenSize.width;
+
+  for (let x = 0; x < width; x++) {
+    let y = height * Math.sin((twoPI * x) / width) + height;
+    robot.moveMouse(x, y);
+  }
+
+  res.send('done.');
+});
+
 // Starts listening when the app is ready
 eapp.on('ready', () => {
     app.listen(3000, () => console.log('Listening @ 0.0.0.0:3000'));
