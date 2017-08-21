@@ -5,6 +5,9 @@
 #include <winsock2.h>
 #pragma comment(lib, "Ws2_32.lib")
 
+#define WINVER 0x0500
+#include <windows.h>
+
 #define PORT 8080
 
 int main(int argc, char *argv[]) {
@@ -15,6 +18,13 @@ int main(int argc, char *argv[]) {
 
 	char buffer[2000], bsize;
 	char *response = "HTTP/1.1 200 OK\r\nContent-Length:14\r\n\r\n<h1>Done.</h1>\r\n";
+
+	// Set keyboard
+	INPUT ip;
+	ip.type = INPUT_KEYBOARD;
+	ip.ki.wScan = 0;
+	ip.ki.time = 0;
+	ip.ki.dwExtraInfo = 0;
 
 	// Init Winsock
 	if (WSAStartup(MAKEWORD(2, 2), &wsa)) {
@@ -50,9 +60,27 @@ int main(int argc, char *argv[]) {
 		puts(buffer);
 
 		// Perform action based on request path
-		if (strstr(buffer, "/close")) {
-			// Press Alt + F4
-			// TODO
+		if (strstr(buffer, "/close")) { // Press Alt + F4
+			// Press Alt
+			ip.ki.wVk = VK_MENU;
+			ip.ki.dwFlags = 0;
+			SendInput(1, &ip, sizeof(INPUT));
+
+			// Press F4
+			ip.ki.wVk = VK_F4;
+			ip.ki.dwFlags = 0;
+			SendInput(1, &ip, sizeof(INPUT));
+
+			// Release F4
+			ip.ki.wVk = VK_F4;
+			ip.ki.dwFlags = KEYEVENTF_KEYUP;
+			SendInput(1, &ip, sizeof(INPUT));
+
+			// Release Alt
+			ip.ki.wVk = VK_MENU;
+			ip.ki.dwFlags = KEYEVENTF_KEYUP;
+			SendInput(1, &ip, sizeof(INPUT));
+
 		}
 		else if (strstr(buffer, "/shutdown")) {
 			// Shutdown
