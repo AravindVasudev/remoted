@@ -1,0 +1,9 @@
+{
+    "files.associations": {
+        "cstdlib": "c",
+        "xtest.h": "c",
+        "intrinsic.h": "c",
+        "unistd.h": "c",
+        "xlib.h": "c"
+    }
+}
