@@ -66,7 +66,6 @@ int main(int argc, char const *argv[]) {
     alt_keycode = XKeysymToKeycode(display, XK_Alt_L);
     f4_keycode = XKeysymToKeycode(display, XK_F4);
 
-    XTestGrabControl (display, True);
     XTestFakeKeyEvent(display, alt_keycode, True, 0);
     XTestFakeKeyEvent(display, f4_keycode, True, 0);
 
