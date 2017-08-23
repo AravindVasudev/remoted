@@ -18,6 +18,7 @@ int main(int argc, char *argv[]) {
 
 	char buffer[2000], bsize;
 	char *response = "HTTP/1.1 200 OK\r\nContent-Length:14\r\n\r\n<h1>Done.</h1>\r\n";
+	char *sub_url, extracted_url[512], open_command[512];
 
 	// Set keyboard
 	INPUT ip;
@@ -60,7 +61,9 @@ int main(int argc, char *argv[]) {
 		puts(buffer);
 
 		// Perform action based on request path
-		if (strstr(buffer, "/close")) { // Press Alt + F4
+		if (strstr(buffer, "/favicon.ico")) { // Ingore /favicon.ico requests
+			continue;
+		} else if (strstr(buffer, "/close")) { // Press Alt + F4
 			// Press Alt
 			ip.ki.wVk = VK_MENU;
 			ip.ki.dwFlags = 0;
@@ -85,6 +88,17 @@ int main(int argc, char *argv[]) {
 		else if (strstr(buffer, "/shutdown")) {
 			// Shutdown
 			system("shutdown -s -t 0");
+		}
+		else if (strstr(buffer, "/open")) {
+			// Opens the URL passed via `url` query params
+			if (sub_url = strstr(buffer, "?url=")) {
+				sprintf(extracted_url, "%s", strtok(sub_url + 5, " "));
+			} else { // if `url` is not passed, uses a default URL
+				strcpy(extracted_url, "https://google.com");
+			}
+
+			sprintf(open_command, "start %s", extracted_url);
+			system(open_command);
 		}
 
 		// Response to Client
