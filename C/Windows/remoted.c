@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <math.h>
 
 #include <winsock2.h>
 #pragma comment(lib, "Ws2_32.lib")
@@ -26,6 +27,23 @@ int main(int argc, char *argv[]) {
 	ip.ki.wScan = 0;
 	ip.ki.time = 0;
 	ip.ki.dwExtraInfo = 0;
+
+	// Set mouse
+	INPUT mouse;
+	mouse.type = INPUT_MOUSE;
+	mouse.mi.dwFlags = MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE;
+	mouse.mi.time = 0; //System will provide the timestamp
+	mouse.mi.dwExtraInfo = 0;
+	mouse.mi.mouseData = 0;
+
+	// Screen Size
+	int centerX = GetSystemMetrics(SM_CXSCREEN) / 2;
+	int centerY = GetSystemMetrics(SM_CYSCREEN) / 2;
+
+	int radius = centerX - 10;
+	int angle, radians;
+
+	printf("%d:%d\n\n", centerX, centerY);
 
 	// Init Winsock
 	if (WSAStartup(MAKEWORD(2, 2), &wsa)) {
@@ -99,6 +117,21 @@ int main(int argc, char *argv[]) {
 
 			sprintf(open_command, "start %s", extracted_url);
 			system(open_command);
+		}
+		else if (strstr(buffer, "/mouse/circle")) {
+			// draw a circle
+			for (angle = 0; angle < 360; angle++) {
+				radians = angle * (M_PI / 180);
+
+				mouse.mi.dx = centerX + radius * cos(radians);
+				mouse.mi.dy = centerY + radius * sin(radians);
+
+				mouse.mi.dx *= (65536 / GetSystemMetrics(SM_CXSCREEN));
+				mouse.mi.dy *= (65536 / GetSystemMetrics(SM_CYSCREEN));
+
+				SendInput(1, &mouse, sizeof(mouse));
+				Sleep(100);
+			}
 		}
 
 		// Response to Client
