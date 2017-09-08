@@ -33,7 +33,7 @@ int main(int argc, char const *argv[]) {
     if ( regcomp(&url, "?url=", 0) ) {
         perror("Cannot compile regular expression");
         exit(EXIT_FAILURE);
-    }    
+    }
 
     // Open X Display
     display = XOpenDisplay(NULL);
@@ -106,7 +106,7 @@ int main(int argc, char const *argv[]) {
             snprintf(open_command, sizeof(open_command), "xdg-open %s", strtok(extracted_url, " "));
             system(open_command);
         } else if ( strstr(buffer, "/mouse/circle") ) {
-            
+
             XWarpPointer(display, None, 0, 0, 0, 0, 0, 200, 200);
             XFlush(display);
         }

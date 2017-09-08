@@ -20,7 +20,7 @@ app.get('/shutdown', (req, res) => {
 });
 
 // open link
-app.get('/link', (req, res) => {
+app.get('/open', (req, res) => {
     let url = req.query.url || 'https://google.com/';
     if (process.platform === 'linux') {
         spawn('xdg-open', [url])
@@ -88,4 +88,4 @@ app.get('/close', (req, res) => {
 
 // Starts listening when the app is ready
 eapp.on('ready', () =>
-    app.listen(3000, () => console.log('Listening @ 0.0.0.0:3000')));
+    app.listen(8080, () => console.log('Listening @ 0.0.0.0:3000')));
